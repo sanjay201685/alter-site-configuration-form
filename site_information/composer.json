@@ -1,0 +1,14 @@
+{
+  "name": "drupal/site_information",
+  "type": "drupal-module",
+  "description": "Alter site information form",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/site_information",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/site_information",
+    "source": "http://cgit.drupalcode.org/site_information"
+  },
+  "require": { }
+}

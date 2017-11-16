@@ -1,0 +1,8 @@
+
+site_information.save_site_api_key_hello:
+  path: '/page_json/{key}/{nid}'
+  defaults:
+    _controller: '\Drupal\site_information\Controller\save_site_api_key::page_json'
+    _title: 'Site API key'
+  requirements:
+    _permission: 'access content'

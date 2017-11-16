@@ -1,0 +1,70 @@
+<?php
+
+/**
+ * @file
+ * Contains site_information.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_help().
+ */
+function site_information_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the site_information module.
+    case 'help.page.site_information':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Alter site information form') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+
+/**
+ * Implements hook_form_alter() on behalf of site_information.module.
+ */
+function site_information_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+    if ($form_id == 'system_site_information_settings') {
+        drupal_set_message('form_test_form_alter() executed.');
+
+        $siteApiKeyValue = \Drupal::state()->get('siteApiKey');
+        //\Drupal::logger('site_information')->notice('siteApiKeyValue==' . $siteApiKeyValue);
+        //$siteApiKeyValue = $this->config('site_information.siteApiKeySetting')->get('siteApiKey');
+
+        $form['site_api_key'] = [
+            '#type' => 'textfield',
+            '#title' => t('Site Api Key'),'#description' => t('Site api key'),
+    '#default_value' => $siteApiKeyValue,
+    '#weight' => '10',
+            ];
+
+        $form['actions']['submit']['#value'] = t('Update Configuration');
+        $form['#validate'][] = 'site_information_validate';
+        $form['actions']['submit']['#submit'][] = 'site_information_submit';
+    }
+}
+
+
+/**
+ * Validates submission values in the FORM_ID() form.
+ */
+function site_information_validate(array &$form, FormStateInterface $form_state) {
+  $siteApiKey = $form_state->getValue('site_api_key');
+
+  if ( !isset($siteApiKey) || ($siteApiKey == 'No Api Key yet')) {
+    $form_state->setErrorByName('site_api_key', t('Please enter correct site api key.'));
+  }
+}
+
+function site_information_submit(&$form, FormStateInterface $form_state) {
+  $siteApiKey = $form_state->getValue('site_api_key');
+  \Drupal::state()->set('siteApiKey', $siteApiKey);
+  /*$this->config('site_information.siteApiKeySetting')
+       ->set('siteApiKey', $siteApiKey)
+       ->save();*/
+}
